@@ -73,3 +73,9 @@ From CTE_Requests*/
 select TeamMember, AVG(Request) AS DailyAve
 From CTE_Requests
 Group by TeamMember
+
+--5: Total B4udig Reuest of the Team on year 2023
+
+Select DATEPART(Year, Date) as Year, count(JO) as TotalB4udigRequest
+FRom Temp_TotalB4udigOutput
+Group by DATEPART(Year, Date)
