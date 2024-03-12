@@ -95,8 +95,8 @@ select Name as TeamMember, Count(Status) as Request_With_Complete_Plans
 FROM Temp_TotalB4udigOutput
 WHERE Status='Completed'
 GROUP by Name
- 
---6.2: Create TempTable for pending requests
+
+ --6.2: Create TempTable for pending requests
 DROP TABLE IF EXISTS Temp_Pending
 Create Table Temp_Pending
 (
@@ -120,6 +120,8 @@ From Temp_Completed
 JOIN Temp_Pending on Temp_Completed.TeamMember = Temp_Pending.TeamMember
 --ORder by Temp_Completed.TeamMember
 )
-Select *, (CAST(Request_With_Complete_Plans/SUM(Request_With_Complete_Plans + Request_With_Pending_Plans)AS NUMERIC))*100 as Percentage
+
+Select *, CAST(Request_With_Complete_Plans AS DECIMAL) / (SUM(CAST(Request_With_Complete_Plans AS DECIMAL) + CAST(Request_With_Pending_Plans AS DECIMAL)))*100 as CompletionRate
 From CTE_CompletionRate
 Group By TeamMember, Request_With_Complete_Plans, Request_With_Pending_Plans
+
