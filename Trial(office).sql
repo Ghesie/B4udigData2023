@@ -57,3 +57,19 @@ From
    Select Name as TeamMember, Month, Monthly_B4udig_Request
    From Temp_TrialTable
  ) as SourceTable PIVOT(AVG(Monthly_B4udig_Request) For Month in (January,February,March,April,May,June,July,August,September,October,November,December)) as PivotTable;
+
+
+--4: Average B4uig Request of each team member daily
+With CTE_Requests as
+(
+select Name as TeamMember,Date, count(JO) AS Request
+From Temp_TotalB4udigOutput
+Group by Name, Date
+)
+/*
+select *
+From CTE_Requests*/
+
+select TeamMember, AVG(Request) AS DailyAve
+From CTE_Requests
+Group by TeamMember
