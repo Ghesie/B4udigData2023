@@ -119,11 +119,6 @@ From Temp_Completed
 JOIN Temp_Pending on Temp_Completed.TeamMember = Temp_Pending.TeamMember
 --ORder by Temp_Completed.TeamMember
 )
-Select SUM(Request_With_Complete_Plans + Request_With_Pending_Plans) as gago
-FROM CTE_CompletionRate
-
-Select *,(Request_With_Complete_Plans / 
-          SUM (Request_With_Complete_Plans + Request_With_Pending_Plans))*100 as Percent
+Select *, (CAST(Request_With_Complete_Plans/SUM(Request_With_Complete_Plans + Request_With_Pending_Plans)AS NUMERIC))*100 as Percentage
 From CTE_CompletionRate
-
-
+Group By TeamMember, Request_With_Complete_Plans, Request_With_Pending_Plans
