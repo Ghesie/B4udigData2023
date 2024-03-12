@@ -95,7 +95,8 @@ select Name as TeamMember, Count(Status) as Request_With_Complete_Plans
 FROM Temp_TotalB4udigOutput
 WHERE Status='Completed'
 GROUP by Name
-
+ 
+--6.2: Create TempTable for pending requests
 DROP TABLE IF EXISTS Temp_Pending
 Create Table Temp_Pending
 (
