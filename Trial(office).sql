@@ -79,3 +79,51 @@ Group by TeamMember
 Select DATEPART(Year, Date) as Year, count(JO) as TotalB4udigRequest
 FRom Temp_TotalB4udigOutput
 Group by DATEPART(Year, Date)
+
+--6: Completion rate of B4udig Request Per Person
+
+--6.1: Create TempTable for completed requests
+DROP TABLE IF EXISTS Temp_Completed
+Create Table Temp_Completed
+(
+TeamMember nvarchar(255),
+Request_With_Complete_Plans int,
+)
+
+Insert into Temp_Completed
+select Name as TeamMember, Count(Status) as Request_With_Complete_Plans
+FROM Temp_TotalB4udigOutput
+WHERE Status='Completed'
+GROUP by Name
+
+DROP TABLE IF EXISTS Temp_Pending
+Create Table Temp_Pending
+(
+TeamMember nvarchar(255),
+Request_With_Pending_Plans int,
+)
+insert into Temp_Pending
+select Name as TeamMember, Count(Status) as Request_With_Pending_Plans
+FROM Temp_TotalB4udigOutput
+WHERE Status='Pending'
+GROUP by Name
+
+SELECT Name as TeamMember, Count(JO) as Total_Req
+FROM Temp_TotalB4udigOutput
+GROUP BY Name
+
+with CTE_CompletionRate as 
+(
+Select Temp_Completed.TeamMember, Request_With_Complete_Plans, Request_With_Pending_Plans
+From Temp_Completed
+JOIN Temp_Pending on Temp_Completed.TeamMember = Temp_Pending.TeamMember
+--ORder by Temp_Completed.TeamMember
+)
+Select SUM(Request_With_Complete_Plans + Request_With_Pending_Plans) as gago
+FROM CTE_CompletionRate
+
+Select *,(Request_With_Complete_Plans / 
+          SUM (Request_With_Complete_Plans + Request_With_Pending_Plans))*100 as Percent
+From CTE_CompletionRate
+
+
