@@ -161,23 +161,7 @@ Group by Name
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- Average B4udig Reuest of the Team on year 2023
+--5: Total B4udig Reuest of the Team on year 2023
 
 
 -- Completion rate of B4udig Request Per Person
